@@ -1,6 +1,11 @@
 "
 " .vimrc - vim configuration file
 "
+"---( Pathogen )------------------------------------------------------------{{{
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+"---}}}
+
 "---( Config vars )---------------------------------------------------------{{{
 set nocompatible
 set backspace=indent,eol,start
@@ -78,12 +83,6 @@ nnoremap <leader>l :set list!<CR>
 "---}}}
 
 "---( Plugins )-------------------------------------------------------------{{{
-
-"""
-" Pathogen Plugin loader (installed as GIT submodule)
-"
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
 
 """
 " NERDTree configuration
