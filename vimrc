@@ -22,20 +22,28 @@ set viminfo=%20,'20,/50,:50,@50,f1,s100,n~/.vim/viminfo
 "---}}}
 
 "---( Special folders )-----------------------------------------------------{{{
-let &directory = expand($HOME) . '/.vim/tmp/,'    . &directory " keep swap elsewhere.
-if !isdirectory(expand($HOME) . '/.vim/tmp/')
-  call mkdir(expand($HOME) . '/.vim/tmp/', "p")
+" Swap files
+let mydirectory = $HOME . '/.vim/tmp/'
+if !isdirectory(mydirectory)
+  call mkdir(mydirectory, '', 0700)
 endif
+let &directory = mydirectory . ',' . &directory
+
+" Undo 
 set undofile
-let &undodir =   expand($HOME) . '/.vim/undo/,'   . &undodir   " keep undo elsewhere.
-if !isdirectory(expand($HOME) . '/.vim/undo/')
-  call mkdir(expand($HOME) . '/.vim/undo/', "p")
+let myundodir = $HOME . '/.vim/undo/'
+if !isdirectory(myundodir)
+  call mkdir(myundodir, '', 0700)
 endif
+let &undodir = myundodir . ',' . &undodir
+
+" Backups
 set nobackup
-let &backupdir = expand($HOME) . '/.vim/backup/,' . &backupdir " keep backups elsewhere.
-if !isdirectory(expand($HOME) . '/.vim/backup/')
-  call mkdir(expand($HOME) . '/.vim/backup/', "p")
+let mybackupdir = $HOME . '/.vim/backup/'
+if !isdirectory(mybackupdir)
+  call mkdir(mybackupdir, '', 0700)
 endif
+let &backupdir = mybackupdir . ',' . &backupdir
 "---}}}
 
 "---( Appearance )----------------------------------------------------------{{{
