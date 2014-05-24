@@ -18,7 +18,7 @@ set modeline
 set noincsearch
 set ruler
 set showcmd
-set viminfo=%50,'1000,/500,:500,@500,f1,s100
+set viminfo=%20,'20,/50,:50,@50,f1,s100,n~/.vim/viminfo
 "---}}}
 
 "---( Special folders )-----------------------------------------------------{{{
