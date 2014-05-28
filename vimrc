@@ -15,6 +15,7 @@ set foldmethod=marker
 set history=50
 set laststatus=2
 set modeline
+set modelines=5
 set noincsearch
 set ruler
 set showcmd
