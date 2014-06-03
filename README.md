@@ -8,9 +8,13 @@ You may need to remove existing `~/.vimrc` file and `~/.vim/` folder
     cd ~
     git clone git@github.com:bozze/vim-files.git .vim
     ln -s .vim/vimrc .vimrc
-    cd ~/.vim
-    git submodule init
-    git submodule update
+    cd ~/.vim/
+    git submodule update --init --recursive
+
+Adding Vim plugins
+------------------
+    cd ~/.vim/
+    git submodule add CLONE_URL bundle/PLUGIN_NAME
 
 Upgrading
 ---------
@@ -22,5 +26,5 @@ Upgrading
     git pull origin master
 
 ### All plugins
-    cd ~/.vim
-    git submodule foreach git pull origin master
+    cd ~/.vim/
+    git submodule update --init --recursive
