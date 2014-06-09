@@ -20,6 +20,8 @@ set noincsearch
 set ruler
 set showcmd
 set viminfo=%20,'20,/50,:50,@50,f1,s100,n~/.vim/viminfo
+set sts=2
+set sw=2
 "---}}}
 
 "---( Special folders )-----------------------------------------------------{{{
@@ -89,6 +91,11 @@ nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" 
 nnoremap <Leader>n :set nu!<CR>
 nnoremap <Leader>w :set wrap!<CR>
 nnoremap <leader>l :set list!<CR>
+nnoremap <leader><left> :bp<CR>
+nnoremap <leader><right> :bn<CR>
+nnoremap <leader><TAB> :bl<CR>
+nnoremap <leader>q :bp <BAR> bd #<CR>
+
 "---}}}
 
 "---( Plugins )-------------------------------------------------------------{{{
@@ -97,6 +104,7 @@ nnoremap <leader>l :set list!<CR>
 " NERDTree configuration
 "
 map <C-f> :NERDTreeToggle<CR>
+map <leader>f :NERDTreeToggle<CR>
 " open NERDTree automatically when vim starts up if no files were specified
 "autocmd vimenter * if !argc() | NERDTree | endif
 " close vim when no files are opened
@@ -112,5 +120,6 @@ let g:airline_left_alt_sep = '⮁'
 let g:airline_right_sep = '⮂'
 let g:airline_right_alt_sep = '⮃'
 let g:airline_symbols = {'linenr': '⭡', 'paste': 'PASTE', 'readonly': '⭤', 'modified': '+', 'space': ' ', 'whitespace': '⎵', 'branch': '⭠'}
+let g:airline#extensions#tabline#fnamemod = ':t'
 
 "---}}}
