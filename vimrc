@@ -3,14 +3,19 @@
 "
 "---( Pathogen )------------------------------------------------------------{{{
 runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
+"let g:pathogen_disabled = []
+"call add(g:pathogen_disabled, 'plugin-name')
+call pathogen#infect()
 "---}}}
 
 "---( Config vars )---------------------------------------------------------{{{
 set nocompatible
 set backspace=indent,eol,start
 set cindent
-set foldenable
+set smartindent
+set autoindent
+filetype indent on
+set nofoldenable
 set foldmethod=marker
 set history=50
 set laststatus=2
