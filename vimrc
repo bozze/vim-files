@@ -67,6 +67,7 @@ if &t_Co > 2 || has("gui_running")
   set t_ut=
   let g:solarized_termcolors=16
   silent! colorscheme solarized
+  hi! link SignColumn LineNr
 endif
 
 " Cursor shape (Normal = block / Insert = vertical bar)
@@ -95,7 +96,7 @@ endif
 "---( Keyboard mappings )---------------------------------------------------{{{
 let mapleader = " "
 nnoremap + :noh<CR>
-nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )\|hi! link SignColumn LineNr<CR>
 nnoremap <Leader>n :set nu!<CR>
 nnoremap <Leader>w :set wrap!<CR>
 nnoremap <leader>l :set list!<CR>
