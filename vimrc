@@ -95,7 +95,7 @@ endif
 "---( Keyboard mappings )---------------------------------------------------{{{
 let mapleader = " "
 nnoremap + :noh<CR>
-nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )\|hi! link SignColumn LineNr<CR>
 nnoremap <Leader>n :set nu!<CR>
 nnoremap <Leader>w :set wrap!<CR>
 nnoremap <leader>l :set list!<CR>
