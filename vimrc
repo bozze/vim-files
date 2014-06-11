@@ -62,6 +62,9 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
   set incsearch
   set background=dark
+  " unset 'Clearing with background color'
+  " see: http://sunaku.github.io/vim-256color-bce.html
+  set t_ut=
   let g:solarized_termcolors=16
   silent! colorscheme solarized
 endif
