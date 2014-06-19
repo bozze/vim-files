@@ -3,7 +3,7 @@
 "
 "---( Pathogen )------------------------------------------------------------{{{
 runtime bundle/vim-pathogen/autoload/pathogen.vim
-"let g:pathogen_disabled = []
+let g:pathogen_disabled = ['vim-airline']
 "call add(g:pathogen_disabled, 'plugin-name')
 call pathogen#infect()
 "---}}}
@@ -104,7 +104,7 @@ nnoremap <leader><left> :bp<CR>
 nnoremap <leader><right> :bn<CR>
 nnoremap <leader><TAB> :bl<CR>
 nnoremap <leader>q :bp <BAR> bd #<CR>
-
+nnoremap <Leader>c :set cursorline!<CR>
 "---}}}
 
 "---( Plugins )-------------------------------------------------------------{{{
@@ -122,15 +122,57 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 """
 " Airline status/tabline config
 "
-let g:airline_powerline_fonts = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = '⮀'
-let g:airline#extensions#tabline#left_alt_sep = '⮁'
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let g:airline_symbols = {'linenr': '⭡', 'paste': 'PASTE', 'readonly': '⭤', 'modified': '+', 'space': ' ', 'whitespace': '⎵', 'branch': '⭠'}
+"let g:airline_powerline_fonts = 0
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = '⮀'
+"let g:airline#extensions#tabline#left_alt_sep = '⮁'
+"let g:airline#extensions#tabline#fnamemod = ':t'
+"let g:airline_left_sep = '⮀'
+"let g:airline_left_alt_sep = '⮁'
+"let g:airline_right_sep = '⮂'
+"let g:airline_right_alt_sep = '⮃'
+"let g:airline_symbols = {'linenr': '⭡', 'paste': 'PASTE', 'readonly': '⭤', 'modified': '+', 'space': ' ', 'whitespace': '⎵', 'branch': '⭠'}
 
-"---}}}
+
+"""
+" Lightline status/tabline config
+"
+let g:lightline = {
+  \ 'colorscheme': 'solarized',
+  \ 'component': {
+    \ 'lineinfo': '⭡ %2l:%-2v',
+  \ },
+  \ 'active': {
+    \ 'left': [ [ 'mode', 'paste' ],
+      \ [ 'fugitive' ] ,
+      \ [ 'readonly', 'filename', 'modified' ] ],
+    \ 'right': [ [ 'lineinfo', 'percent' ],
+      \ [ 'filetype', 'filefe' ] ]
+  \ },
+  \ 'inactive': {
+    \ 'left': [ [ 'filename' ] ],
+    \ 'right': [ [ 'modified' ] ]
+  \ },
+  \ 'component_function': {
+    \ 'readonly': 'MyReadonly',
+    \ 'fugitive': 'MyFugitive',
+    \ 'filefe': 'MyFileFE',
+  \ },
+  \ 'separator': { 'left': '⮀', 'right': '⮂' },
+  \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+\ }
+function! MyReadonly()
+  return &readonly ? '⭤' : ''
+endfunction
+function! MyFugitive()
+  if exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? '⭠ '._ : ''
+  endif
+  return 'aaaaaas'
+endfunction
+function! MyFileFE()
+  let fileencoding = strlen(&fenc)? &fenc : &enc
+  let fileformat = &fileformat
+  return fileencoding.' ['.fileformat.']'
+endfunction
