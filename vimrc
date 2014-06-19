@@ -135,19 +135,20 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 
 """
-" Lightline status/tabline config
+" Lightline status/tabline config 
 "
 let g:lightline = {
   \ 'colorscheme': 'solarized',
   \ 'component': {
     \ 'lineinfo': '⭡ %2l:%-2v',
+    \ 'percent': '%3p%%',
   \ },
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
       \ [ 'fugitive' ] ,
-      \ [ 'readonly', 'filename', 'modified' ] ],
+      \ [ 'filename' ] ],
     \ 'right': [ [ 'lineinfo', 'percent' ],
-      \ [ 'filetype', 'filefe' ] ]
+      \ [ 'filetype', 'fileencoding', 'fileformat' ] ]
   \ },
   \ 'inactive': {
     \ 'left': [ [ 'filename' ] ],
@@ -156,23 +157,68 @@ let g:lightline = {
   \ 'component_function': {
     \ 'readonly': 'MyReadonly',
     \ 'fugitive': 'MyFugitive',
-    \ 'filefe': 'MyFileFE',
+    \ 'filename': 'MyFilename',
+    \ 'fileformat': 'MyFileformat',
+    \ 'fileencoding': 'MyFileencoding',
+    \ 'filetype': 'MyFiletype',
+    \ 'mode'	: 'MyMode',
   \ },
   \ 'separator': { 'left': '⮀', 'right': '⮂' },
-  \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+  \ 'subseparator': { 'left': '⮁', 'right': '│' }
 \ }
-function! MyReadonly()
-  return &readonly ? '⭤' : ''
+
+function! MyFileformat()
+  return winwidth(0) > 75 ? &fileformat : ''
 endfunction
+
+function! MyFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! MyFiletype()
+  return winwidth(0) > 65 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
 function! MyFugitive()
-  if exists("*fugitive#head")
+  if winwidth(0) > 60 && expand('%:t') !~? 'Tagbar\|Gundo\|NERD' 
+	\ && &ft !~? 'vimfiler' && exists("*fugitive#head")
     let _ = fugitive#head()
     return strlen(_) ? '⭠ '._ : ''
   endif
-  return 'aaaaaas'
+  return ''
 endfunction
-function! MyFileFE()
-  let fileencoding = strlen(&fenc)? &fenc : &enc
-  let fileformat = &fileformat
-  return fileencoding.' ['.fileformat.']'
+
+function! MyReadonly()
+  return &readonly ? '⭤' : ''
+endfunction
+
+function! MyModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! MyFilename()
+  let fname = expand('%:t')
+  return fname == 'ControlP' ? g:lightline.ctrlp_item :
+    \ fname == '__Tagbar__' ? g:lightline.fname :
+    \ fname =~ '__Gundo\|NERD_tree' ? '' :
+    \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
+    \ &ft == 'unite' ? unite#get_status_string() :
+    \ &ft == 'vimshell' ? vimshell#get_status_string() :
+    \ ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+    \ ('' != fname ? fname : '[No Name]') .
+    \ ('' != MyModified() ? ' ' . MyModified() : '')
+endfunction
+
+function! MyMode()
+  let fname = expand('%:t')
+  return fname == '__Tagbar__' ? 'Tagbar' :
+    \ fname == 'ControlP' ? 'CtrlP' :
+    \ fname == '__Gundo__' ? 'Gundo' :
+    \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
+    \ fname =~ 'NERD_tree' ? 'NERDTree' :
+    \ &ft == 'help' ? 'HELP' :
+    \ &ft == 'unite' ? 'Unite' :
+    \ &ft == 'vimfiler' ? 'VimFiler' :
+    \ &ft == 'vimshell' ? 'VimShell' :
+    \ winwidth(0) > 55 ? lightline#mode() : ''
 endfunction
