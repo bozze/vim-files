@@ -28,3 +28,6 @@
 [submodule "bundle/ctrlp"]
 	path = bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
+[submodule "bundle/lightline"]
+	path = bundle/lightline
+	url = git@github.com:bozze/lightline.vim.git
