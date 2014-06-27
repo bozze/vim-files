@@ -136,7 +136,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " Lightline status/tabline config
 "
 let g:lightline = {
-  \ 'colorscheme': 'solarized',
+  \ 'colorscheme': 'my_solarized_dark',
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
       \ [ 'fugitive', 'filename' ] ],
