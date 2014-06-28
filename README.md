@@ -20,7 +20,7 @@ Upgrading
 ---------
 ### Main repo
     git pull origin master
-    
+
 ### A specific plugin
     cd ~/.vim/bundle/<plugin-name>
     git pull origin master
