@@ -67,11 +67,15 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
   set incsearch
   set background=dark
+  " Mode displayed by Lightline statusbar
+  set noshowmode
+  set cursorline
   " unset 'Clearing with background color'
   " see: http://sunaku.github.io/vim-256color-bce.html
   set t_ut=
   let g:solarized_termcolors=16
   silent! colorscheme solarized
+  " set Sign column color to Line numbers column color
   hi! link SignColumn LineNr
 endif
 
@@ -104,12 +108,20 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 " The above flashes annoyingly while typing, be calmer in insert mode
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+
+" Toggle background color and update lightline statusbar
+function! ToggleBackground()
+  let &background = ( &background == "dark"? "light" : "dark" )
+  let g:lightline.colorscheme="my_solarized_{&background}"
+  call lightline#init() | call lightline#update()
+  hi! link SignColumn LineNr
+endfunction
 "---}}}
 
 "---( Keyboard mappings )---------------------------------------------------{{{
 let mapleader = " "
 nnoremap + :noh<CR>
-nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )\|hi! link SignColumn LineNr<CR>
+nnoremap <Leader>b :call ToggleBackground()<CR>
 nnoremap <Leader>n :set nu!<CR>
 nnoremap <Leader>w :set wrap!<CR>
 nnoremap <leader>l :set list!<CR>
@@ -136,7 +148,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " Lightline status/tabline config
 "
 let g:lightline = {
-  \ 'colorscheme': 'my_solarized_dark',
+  \ 'colorscheme': 'my_solarized',
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
       \ [ 'fugitive', 'filename' ] ],
