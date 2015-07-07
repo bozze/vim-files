@@ -140,7 +140,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let g:lightline = {
   \ 'colorscheme': 'solarized',
   \ 'component': {
-    \ 'lineinfo': '⭡ %2l:%-2v',
+    \ 'lineinfo': ' %2l:%-2v',
   \ },
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
@@ -158,16 +158,16 @@ let g:lightline = {
     \ 'fugitive': 'MyFugitive',
     \ 'filefe': 'MyFileFE',
   \ },
-  \ 'separator': { 'left': '⮀', 'right': '⮂' },
-  \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '', 'right': '' }
 \ }
 function! MyReadonly()
-  return &readonly ? '⭤' : ''
+  return &readonly ? '' : ''
 endfunction
 function! MyFugitive()
   if exists("*fugitive#head")
     let _ = fugitive#head()
-    return strlen(_) ? '⭠ '._ : ''
+    return strlen(_) ? ' '._ : ''
   endif
   return 'aaaaaas'
 endfunction
