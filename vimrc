@@ -41,7 +41,7 @@ if !isdirectory(mydirectory)
 endif
 let &directory = mydirectory . ',' . &directory
 
-" Undo 
+" Undo
 set undofile
 let myundodir = $HOME . '/.vim/undo/'
 if !isdirectory(myundodir)
@@ -120,7 +120,7 @@ endfunction " }}}
 "---( Keyboard mappings )---------------------------------------------------{{{
 let mapleader = " "
 nnoremap + :noh<CR>
-nnoremap <Leader>b :let &background = ( &background == "dark"? "light" : "dark" )\|hi! link SignColumn LineNr<CR>
+nnoremap <Leader>b :call ToggleBackground()<CR>
 nnoremap <Leader>n :set nu!<CR>
 nnoremap <Leader>w :set wrap!<CR>
 nnoremap <leader>l :set list!<CR>
@@ -149,12 +149,14 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let g:lightline = {
   \ 'colorscheme': 'my_solarized',
   \ 'component': {
-    \ 'lineinfo': ' %2l:%-2v',
+    \ 'percent'    : '%3p%%'
   \ },
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
       \ [ 'fugitive', 'filename' ] ],
-    \ 'right': [ [ 'lineinfo' ],
+    \ 'right': [
+      \ [ 'percent' ],
+      \ [ 'lineinfo' ],
       \ [ 'filetype', 'fileencoding' ],
       \ [ 'whitespace' ] ],
   \ },
@@ -209,12 +211,12 @@ function! MyFilename() " {{{
 endfunction " }}}
 
 function! MyFileencoding() " {{{
-  let fileenc = (strlen(&fenc) ? &fenc : &enc) . ('unix' == &fileformat ? '' : '(' . &fileformat . ')')
+  let fileenc = (strlen(&fenc) ? toupper(&fenc) : &enc) . ('unix' == &fileformat ? '' : '(' . &fileformat . ')')
   return winwidth(0) >= strlen(MyMode()) + strlen(MyFugitive()) + strlen(MyFilename()) + 24 + 24 ? fileenc : ''
 endfunction " }}}
 
 function! MyFiletype() " {{{
-  let ftype = '⭢⭣' . (strlen(&filetype) ? &filetype : 'undef')
+  let ftype = (strlen(&filetype) ? &filetype : 'no ft')
   return winwidth(0) >= strlen(MyMode()) + strlen(MyFugitive()) + strlen(MyFilename()) + 24 + 32 ? ftype : ''
 endfunction " }}}
 
@@ -236,8 +238,8 @@ function! MyLineinfo() " {{{
   let l:cl = line(".")
   let l:ll = line("$")
   let l:cc = col(".")
-  let l:fm = printf("⭡ %%0%dd/%%d → %%03d", strlen(l:ll))
-  let l:li = printf(l:fm, l:cl, l:ll, l:cc)
+  let l:fm = printf("↓ %%0%dd → %%03d", strlen(l:ll))
+  let l:li = printf(l:fm, l:cl, l:cc)
   return expand('%:t') !~? 'Tagbar\|Gundo\|NERD'
         \ && winwidth(0) >= strlen(MyMode()) + strlen(MyFugitive()) + strlen(MyFilename()) + 24 + 16 ? l:li : ''
 endfunction " }}}
