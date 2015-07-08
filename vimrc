@@ -31,6 +31,7 @@ set preserveindent
 set softtabstop=2
 set shiftwidth=2
 set tabstop=2
+set so=8
 "---}}}
 
 "---( Special folders )-----------------------------------------------------{{{
@@ -100,6 +101,12 @@ if has('mouse')
   set ttymouse=xterm2
 endif
 
+" Return to last edit position when opening files
+autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
 " Highlight trailing spaces (https://github.com/bronson/vim-trailing-whitespace)
 highlight ExtraWhitespace ctermbg=darkblue guibg=#382424
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkblue guibg=#382424
@@ -129,6 +136,8 @@ nnoremap <leader><right> :bn<CR>
 nnoremap <leader><TAB> :bl<CR>
 nnoremap <leader>q :bp <BAR> bd #<CR>
 nnoremap <Leader>c :set cursorline!<CR>
+nnoremap <Leader>C :set cursorcolumn!<CR>
+nnoremap <leader>p :setlocal paste!<cr>
 "---}}}
 
 "---( Plugins )-------------------------------------------------------------{{{
@@ -149,7 +158,8 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let g:lightline = {
   \ 'colorscheme': 'my_solarized',
   \ 'component': {
-    \ 'percent'    : '%3p%%'
+    \ 'percent': '%3p%%',
+    \ 'lineinfo': '↓ %-3l → %-2v'
   \ },
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
@@ -173,12 +183,12 @@ let g:lightline = {
     \ 'fileencoding': 'MyFileencoding',
     \ 'filetype'    : 'MyFiletype',
     \ 'mode'	      : 'MyMode',
-    \ 'lineinfo'    : 'MyLineinfo',
-    \ 'whitespace'  : 'MyWhitespace',
+    \ 'whitespace'  : 'MyWhitespace'
   \ },
   \ 'separator': { 'left': '', 'right': '' },
   \ 'subseparator': { 'left': '', 'right': '' }
 \ }
+
 function! MyReadonly() " {{{
   return &readonly ? '' : ''
 endfunction " }}}
@@ -231,17 +241,6 @@ function! MyMode() " {{{
     \ &ft == 'unite' ? 'Unite' :
     \ &ft == 'vimfiler' ? 'VimFiler' :
     \ &ft == 'vimshell' ? 'VimShell' : lightline#mode()
-    "\ winwidth(0) > 55 ? lightline#mode() : ''
-endfunction " }}}
-
-function! MyLineinfo() " {{{
-  let l:cl = line(".")
-  let l:ll = line("$")
-  let l:cc = col(".")
-  let l:fm = printf("↓ %%0%dd → %%03d", strlen(l:ll))
-  let l:li = printf(l:fm, l:cl, l:cc)
-  return expand('%:t') !~? 'Tagbar\|Gundo\|NERD'
-        \ && winwidth(0) >= strlen(MyMode()) + strlen(MyFugitive()) + strlen(MyFilename()) + 24 + 16 ? l:li : ''
 endfunction " }}}
 
 function! MyWhitespace() " {{{
@@ -249,7 +248,8 @@ function! MyWhitespace() " {{{
   let trailing = lnum != 0 && cnum != 0 ? '⎵ :'.lnum : ''
   let tabs = search('^\t', 'nw') != 0
   let spaces = search('^ ', 'nw') != 0
-  return (tabs && spaces ? '[mixed]' : '') . trailing
+  return &ft != 'help' ? (tabs && spaces ? '[mixed]' : '') . trailing : ''
+  "return expand('%:t') !~? 'Tagbar\|Gundo\|NERD' ? '' (tabs && spaces ? '[mixed]' : '') . trailing : ''
 endfunction " }}}
 
 let g:ctrlp_status_func = {
